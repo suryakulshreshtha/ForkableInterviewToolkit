@@ -100,7 +100,4 @@ It's third-party and can change without notice. `scripts/verify_selectors.py` te
 ---
 
 ## Where the docs live
-
-[`docs/interview-prep/`](docs/interview-prep/) — every entry in the same seven-part format:
-
-> Direct Answer → Real-Time Example → Code → STAR Answer → Interview-Ready Answer → Interview Tip → One-Line Revision
+They Dont Anymore ^_^
