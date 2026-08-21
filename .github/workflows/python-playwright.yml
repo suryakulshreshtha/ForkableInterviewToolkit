@@ -1,0 +1,60 @@
+name: Python + Playwright
+
+on:
+  push:
+    paths:
+      - 'projects/Python-Playwright-Automation/**'
+      - '.github/workflows/python-playwright.yml'
+  pull_request:
+    paths:
+      - 'projects/Python-Playwright-Automation/**'
+      - '.github/workflows/python-playwright.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: projects/Python-Playwright-Automation
+
+jobs:
+  test:
+    name: pytest (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: projects/Python-Playwright-Automation/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install --with-deps ${{ matrix.browser }}
+
+      # Functional suite only, single pass. Never load-test the practice site.
+      - name: Run test suite
+        run: |
+          pytest framework/tests \
+            --browser ${{ matrix.browser }} \
+            --tracing=retain-on-failure \
+            --html=reports/report.html --self-contained-html \
+            -v
+
+      - name: Upload report & traces
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-report-${{ matrix.browser }}
+          path: |
+            projects/Python-Playwright-Automation/reports/
+            projects/Python-Playwright-Automation/test-results/
+          retention-days: 14

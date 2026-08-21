@@ -1,0 +1,6 @@
+{
+  "_comment": "Synthetic data only. No real names, emails, or credentials -- ever.",
+  "dropdown_options": ["option1", "option2", "option3"],
+  "alert_names": ["ForkableTester", "SdetSurya", "AutomationBot"],
+  "expected_course_keywords": ["Selenium", "SQL", "Appium", "JMETER"]
+}

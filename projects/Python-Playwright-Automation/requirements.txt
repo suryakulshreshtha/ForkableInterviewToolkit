@@ -1,0 +1,23 @@
+# Core
+playwright==1.47.0
+pytest==8.3.3
+pytest-playwright==0.5.2
+
+# Parallel execution
+pytest-xdist==3.6.1
+
+# Reporting
+pytest-html==4.1.1
+
+# BDD example
+pytest-bdd==7.3.0
+
+# API testing example
+requests==2.32.3
+
+# Load testing example (runs against the LOCAL target app only)
+locust==2.31.6
+flask==3.0.3
+
+# Synthetic test data
+Faker==30.3.0
