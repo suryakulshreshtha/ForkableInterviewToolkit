@@ -35,7 +35,9 @@ ForkableInterviewToolkit/
 └── projects/
     └── Python-Playwright-Automation/
         ├── README.md
-        ├── docs/interview-prep/  ← 11 chapters, ~40 Q&As, 7-part format
+        ├── docs/
+        │   ├── Python_QA_Automation_Handbook.md  ← single-file quick reference
+        │   └── interview-prep/                   ← 11 chapters, 27 entries, 7-part format
         ├── framework/            ← the real, runnable POM suite
         └── examples/             ← small standalone demos (BDD, API, load)
 ```
@@ -64,6 +66,8 @@ Full details (markers, reporting, tracing, CI) live in the [project README](proj
 **📖 `docs/interview-prep/`** — study notes in a fixed seven-part format so every topic reads the same way:
 
 > Direct Answer → Real-Time Example → Code → STAR Answer → Interview-Ready Answer → Interview Tip → One-Line Revision
+
+Short on time? [`docs/Python_QA_Automation_Handbook.md`](projects/Python-Playwright-Automation/docs/Python_QA_Automation_Handbook.md) is the single-file, skim-before-you-walk-in version of the same material.
 
 **🧪 `framework/` + `examples/`** — the same ideas, actually executing. When the notes say *"I use fixtures to centralise setup"*, [`conftest.py`](projects/Python-Playwright-Automation/conftest.py) is right there doing it. Notes and code cross-link both ways, so neither can quietly drift out of date.
 
