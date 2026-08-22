@@ -1,0 +1,58 @@
+name: TypeScript + Playwright
+
+on:
+  push:
+    paths:
+      - 'projects/TypeScript-Playwright-Automation/**'
+      - '.github/workflows/typescript-playwright.yml'
+  pull_request:
+    paths:
+      - 'projects/TypeScript-Playwright-Automation/**'
+      - '.github/workflows/typescript-playwright.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: projects/TypeScript-Playwright-Automation
+
+jobs:
+  test:
+    name: playwright test (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: projects/TypeScript-Playwright-Automation/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      # Functional suite only, single pass. Never load-test the practice site.
+      - name: Run test suite
+        run: npx playwright test --project=${{ matrix.browser }}
+
+      - name: Upload report & traces
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: |
+            projects/TypeScript-Playwright-Automation/playwright-report/
+            projects/TypeScript-Playwright-Automation/test-results/
+          retention-days: 14

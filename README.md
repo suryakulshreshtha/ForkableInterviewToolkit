@@ -4,6 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python + Playwright](https://github.com/suryakulshreshtha/ForkableInterviewToolkit/actions/workflows/python-playwright.yml/badge.svg)](../../actions/workflows/python-playwright.yml)
+[![TypeScript + Playwright](https://github.com/suryakulshreshtha/ForkableInterviewToolkit/actions/workflows/typescript-playwright.yml/badge.svg)](../../actions/workflows/typescript-playwright.yml)
 
 Most interview-prep repos are a wall of questions with no code. Most framework demos are a wall of code with no explanation. This one is deliberately **both**, kept side by side so every claim in the notes has a runnable file backing it up.
 
@@ -14,7 +15,7 @@ Most interview-prep repos are a wall of questions with no code. Most framework d
 | Project | Stack | Status |
 |---|---|---|
 | [`Python-Playwright-Automation`](projects/Python-Playwright-Automation/) | Python · Playwright · Pytest · pytest-bdd · Locust · GitHub Actions | ✅ Active |
-| _`TypeScript-Playwright-Automation`_ | TypeScript · Playwright Test | 🕓 Planned |
+| [`TypeScript-Playwright-Automation`](projects/TypeScript-Playwright-Automation/) | TypeScript · Playwright Test · playwright-bdd · Artillery · GitHub Actions | ✅ Active |
 | _`API-Testing-Toolkit`_ | Python · requests · Schemathesis | 🕓 Planned |
 
 Each project is **fully self-contained** — its own README, its own dependencies, its own test suite, its own CI workflow. Fork the repo and delete the projects you don't care about; nothing will break.
@@ -31,15 +32,23 @@ ForkableInterviewToolkit/
 ├── docs/
 │   └── ADDING-A-NEW-PROJECT.md  ← the contract every project follows
 ├── .github/workflows/
-│   └── python-playwright.yml    ← one workflow per project, path-filtered
+│   ├── python-playwright.yml       ← one workflow per project, path-filtered
+│   └── typescript-playwright.yml
 └── projects/
-    └── Python-Playwright-Automation/
+    ├── Python-Playwright-Automation/
+    │   ├── README.md
+    │   ├── docs/
+    │   │   ├── Python_QA_Automation_Handbook.md   ← single-file quick reference
+    │   │   └── interview-prep/                    ← 11 chapters, 27 entries
+    │   ├── framework/          ← the real, runnable POM suite
+    │   └── examples/           ← standalone demos (BDD, API, load)
+    └── TypeScript-Playwright-Automation/
         ├── README.md
         ├── docs/
-        │   ├── Python_QA_Automation_Handbook.md  ← single-file quick reference
-        │   └── interview-prep/                   ← 11 chapters, 27 entries, 7-part format
-        ├── framework/            ← the real, runnable POM suite
-        └── examples/             ← small standalone demos (BDD, API, load)
+        │   ├── TypeScript_QA_Automation_Handbook.md
+        │   └── interview-prep/                    ← 12 chapters, 29 entries
+        ├── framework/          ← POM suite with base.extend() fixtures
+        └── examples/           ← standalone demos (BDD, API, load)
 ```
 
 ---
@@ -48,16 +57,30 @@ ForkableInterviewToolkit/
 
 ```bash
 git clone https://github.com/suryakulshreshtha/ForkableInterviewToolkit.git
-cd ForkableInterviewToolkit/projects/Python-Playwright-Automation
+cd ForkableInterviewToolkit
+```
 
+**Python edition:**
+
+```bash
+cd projects/Python-Playwright-Automation
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 playwright install --with-deps
-
 pytest framework/tests -v
 ```
 
-Full details (markers, reporting, tracing, CI) live in the [project README](projects/Python-Playwright-Automation/README.md).
+**TypeScript edition:**
+
+```bash
+cd projects/TypeScript-Playwright-Automation
+npm ci
+npx playwright install --with-deps
+npm test
+```
+
+Full details (tags, reporting, tracing, CI) live in each project's README:
+[Python](projects/Python-Playwright-Automation/README.md) · [TypeScript](projects/TypeScript-Playwright-Automation/README.md)
 
 ---
 
@@ -67,9 +90,29 @@ Full details (markers, reporting, tracing, CI) live in the [project README](proj
 
 > Direct Answer → Real-Time Example → Code → STAR Answer → Interview-Ready Answer → Interview Tip → One-Line Revision
 
-Short on time? [`docs/Python_QA_Automation_Handbook.md`](projects/Python-Playwright-Automation/docs/Python_QA_Automation_Handbook.md) is the single-file, skim-before-you-walk-in version of the same material.
+Short on time? Each project ships a single-file condensed handbook:
+[Python](projects/Python-Playwright-Automation/docs/Python_QA_Automation_Handbook.md) · [TypeScript](projects/TypeScript-Playwright-Automation/docs/TypeScript_QA_Automation_Handbook.md)
 
-**🧪 `framework/` + `examples/`** — the same ideas, actually executing. When the notes say *"I use fixtures to centralise setup"*, [`conftest.py`](projects/Python-Playwright-Automation/conftest.py) is right there doing it. Notes and code cross-link both ways, so neither can quietly drift out of date.
+**🧪 `framework/` + `examples/`** — the same ideas, actually executing. When the notes say *"I use fixtures to centralise setup"*, [`conftest.py`](projects/Python-Playwright-Automation/conftest.py) and [`fixtures.ts`](projects/TypeScript-Playwright-Automation/framework/fixtures/fixtures.ts) are right there doing it. Notes and code cross-link both ways, so neither can quietly drift out of date.
+
+---
+
+## Two languages, one engine
+
+Both projects automate the **same practice site** with the **same architecture** — Page Object Model, isolated selectors, fixtures for setup, path-filtered CI. That's deliberate: it turns the pair into a side-by-side reference for what genuinely differs between Playwright's two most popular bindings.
+
+| Concern | Python | TypeScript |
+|---|---|---|
+| Runner | pytest | `@playwright/test` |
+| Custom fixtures | `@pytest.fixture` in `conftest.py` | `base.extend<T>()` |
+| Data-driven | `@pytest.mark.parametrize` | `for…of` loop around `test()` |
+| Assertions | `expect(x).to_be_visible()` | `await expect(x).toBeVisible()` |
+| Async | sync API — no `await` | everything async |
+| Parallelism | `pytest-xdist` | built-in workers |
+| BDD | pytest-bdd | playwright-bdd |
+| Load testing | Locust + Flask | Artillery + Express |
+
+Being able to name these differences precisely — rather than treating "Playwright" as one thing — is exactly the kind of detail interviewers use to tell real experience from reading. The full breakdown is in [Python ↔ TypeScript](projects/TypeScript-Playwright-Automation/docs/interview-prep/11-python-vs-typescript.md).
 
 ---
 

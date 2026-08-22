@@ -1,0 +1,46 @@
+# Artillery load profile -- the YAML equivalent of a JMeter Thread Group.
+#
+# NEVER change `target` to a third-party host. scripts/run-load-test.ts enforces
+# this at runtime and will refuse to start against a non-local target.
+config:
+  target: "http://localhost:3000"
+  phases:
+    # arrivalRate = new virtual users per second (JMeter: ramp-up)
+    # duration    = how long that phase lasts
+    - duration: 10
+      arrivalRate: 2
+      name: "Warm up"
+    - duration: 20
+      arrivalRate: 5
+      name: "Sustained load"
+  http:
+    timeout: 10
+
+scenarios:
+  # `weight` is the Artillery equivalent of Locust's @task(n) -- relative frequency.
+  - name: "Browse a product"
+    weight: 5
+    flow:
+      - get:
+          url: "/products/1"
+          expect:
+            - statusCode: 200
+
+  - name: "Browse a missing product"
+    weight: 2
+    flow:
+      - get:
+          url: "/products/999"
+          expect:
+            - statusCode: 404
+
+  - name: "Checkout"
+    weight: 1
+    flow:
+      - post:
+          url: "/checkout"
+          json:
+            product_id: 1
+            qty: 1
+          expect:
+            - statusCode: 201

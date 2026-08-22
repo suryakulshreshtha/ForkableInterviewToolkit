@@ -32,3 +32,25 @@ trace/
 .idea/
 .DS_Store
 Thumbs.db
+
+# ---------- Node / TypeScript ----------
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+.cache/
+
+# Playwright (JS/TS) artifacts
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# playwright-bdd generated specs -- generated, never committed
+.features-gen/
+**/.features-gen/
+
+# Artillery output
+artillery-report*.json
+artillery-report*.html

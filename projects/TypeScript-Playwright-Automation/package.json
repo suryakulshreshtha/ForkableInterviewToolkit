@@ -1,0 +1,38 @@
+{
+  "name": "typescript-playwright-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interview prep + runnable proof. TypeScript, Playwright Test, playwright-bdd, Artillery.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:debug": "playwright test --debug",
+    "test:firefox": "playwright test --project=firefox",
+    "report": "playwright show-report",
+    "trace": "playwright show-trace",
+    "typecheck": "tsc --noEmit",
+    "verify:selectors": "tsx scripts/verify-selectors.ts",
+    "test:api": "playwright test --config=playwright.api.config.ts",
+    "bdd:gen": "bddgen --config=playwright.bdd.config.ts",
+    "test:bdd": "npm run bdd:gen && playwright test --config=playwright.bdd.config.ts",
+    "load:target": "tsx examples/load-artillery/local-target-app.ts",
+    "load:test": "tsx scripts/run-load-test.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "artillery": "^2.0.20",
+    "express": "^4.19.2",
+    "playwright-bdd": "^9.2.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  }
+}
