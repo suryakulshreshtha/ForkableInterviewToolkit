@@ -97,7 +97,7 @@ UI tests run against **[rahulshettyacademy.com/AutomationPractice](https://rahul
 
 It's third-party and can change without notice. `scripts/verify_selectors.py` tells you in ~20 seconds whether a failure is your code or their markup.
 
-> **Heads up:** the id-based selectors in `framework/pages/automation_practice_page.py` reflect this page's long-standing markup, but they haven't been re-verified against the live site since this repo was scaffolded. Run `verify_selectors.py` on first clone — it's exactly what that script is for.
+> **Status:** all locators verified passing against the live site. If a test starts failing later, run `verify_selectors.py` first — selectors live in one file (`framework/pages/automation_practice_page.py`) by design, so it's a one-file fix.
 
 ---
 
