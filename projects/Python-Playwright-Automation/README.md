@@ -34,7 +34,9 @@ Python-Playwright-Automation/
 ├── requirements.txt
 ├── scripts/
 │   └── verify_selectors.py     # one-command locator health check
-├── docs/interview-prep/        # 11 chapters, ~40 Q&As
+├── docs/
+│   ├── Python_QA_Automation_Handbook.md   # single-file quick-reference / skim version
+│   └── interview-prep/         # 11 chapters, 27 entries, full seven-part format
 ├── framework/
 │   ├── pages/                  # Page Objects — actions only, never assertions
 │   ├── utilities/              # config helpers
@@ -100,4 +102,8 @@ It's third-party and can change without notice. `scripts/verify_selectors.py` te
 ---
 
 ## Where the docs live
-They Dont Anymore ^_^
+
+- [`docs/Python_QA_Automation_Handbook.md`](docs/Python_QA_Automation_Handbook.md) — one-file condensed reference, skim before an interview
+- [`docs/interview-prep/`](docs/interview-prep/) — the full guide, every entry in the same seven-part format:
+
+  > Direct Answer → Real-Time Example → Code → STAR Answer → Interview-Ready Answer → Interview Tip → One-Line Revision
