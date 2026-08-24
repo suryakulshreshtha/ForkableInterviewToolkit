@@ -1,0 +1,4 @@
+APP_NAME=survival-guide-demo
+LOG_LEVEL=info
+
+This file IS tracked. Safe to commit -- no secrets in it.

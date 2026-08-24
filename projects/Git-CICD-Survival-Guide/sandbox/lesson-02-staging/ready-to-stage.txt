@@ -1,0 +1,13 @@
+STATUS: ready
+
+This file represents finished work you WANT in your next commit.
+
+Exercise (Chapter 1, staging):
+  Edit both files in this folder, then stage ONLY this one:
+    git add sandbox/lesson-02-staging/ready-to-stage.txt
+    git status
+
+  You should see this file under "Changes to be committed"
+  and work-in-progress.txt under "Changes not staged for commit".
+
+  That gap is the staging area. It is the whole point of `git add`.

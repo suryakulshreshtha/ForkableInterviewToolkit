@@ -1,0 +1,12 @@
+# Chapter 3 demo. Patterns are relative to THIS folder.
+
+# Ignore real secrets, keep the template
+secrets.env
+!secrets.example.env
+
+# Ignore generated output
+build-output/
+*.log
+
+# Ignore OS noise
+.DS_Store

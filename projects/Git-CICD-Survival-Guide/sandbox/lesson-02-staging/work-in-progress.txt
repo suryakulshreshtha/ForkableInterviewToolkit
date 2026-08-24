@@ -1,0 +1,8 @@
+STATUS: not ready
+
+This file represents half-finished work you do NOT want committed yet.
+
+Leave it unstaged during the Chapter 1 exercise.
+
+Real-world habit: `git add -A` stages everything, including things you
+may not have meant to include. Run `git status` before every commit.

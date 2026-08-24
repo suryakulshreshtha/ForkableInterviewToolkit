@@ -1,0 +1,13 @@
+Hello, Git.
+
+This file exists so you have something harmless to commit.
+
+Exercise (Chapter 1):
+  1. Change the word "Hello" below to your name.
+  2. Run: git status      -> see it listed as modified
+  3. Run: git diff        -> see exactly what changed
+  4. Run: git add .       -> stage it
+  5. Run: git status      -> see it move to "Changes to be committed"
+  6. Run: git commit -m "My first commit"
+
+Greeting: Hello

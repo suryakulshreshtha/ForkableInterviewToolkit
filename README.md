@@ -16,6 +16,7 @@ Most interview-prep repos are a wall of questions with no code. Most framework d
 |---|---|---|
 | [`Python-Playwright-Automation`](projects/Python-Playwright-Automation/) | Python · Playwright · Pytest · pytest-bdd · Locust · GitHub Actions | ✅ Active |
 | [`TypeScript-Playwright-Automation`](projects/TypeScript-Playwright-Automation/) | TypeScript · Playwright Test · playwright-bdd · Artillery · GitHub Actions | ✅ Active |
+| [`Git-CICD-Survival-Guide`](projects/Git-CICD-Survival-Guide/) | Git · GitHub Actions · Docker · CI/CD fundamentals · zero dependencies | ✅ Active |
 | _`API-Testing-Toolkit`_ | Python · requests · Schemathesis | 🕓 Planned |
 
 Each project is **fully self-contained** — its own README, its own dependencies, its own test suite, its own CI workflow. Fork the repo and delete the projects you don't care about; nothing will break.
