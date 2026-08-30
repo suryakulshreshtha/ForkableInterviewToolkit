@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+import { baseUrl, isLiveTarget } from './framework/utils/config';
+
 /**
  * Main config -- the framework suite only.
  *
@@ -10,16 +12,27 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './framework/tests',
 
-  // Public practice page, published for automation practice.
-  // See the repo README's responsible-use policy before pointing this elsewhere.
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://rahulshettyacademy.com/AutomationPractice/',
+    baseURL: baseUrl(),
     actionTimeout: 15_000,
     navigationTimeout: 30_000,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
+
+  // Start the local fixture for the suite and stop it afterwards, so a run is
+  // hermetic and needs no network. Skipped when BASE_URL points at the live
+  // site, which is what `npm run test:live` does.
+  webServer: isLiveTarget()
+    ? undefined
+    : {
+        command: 'npx tsx fixtures/practice-app/server.ts',
+        url: baseUrl(),
+        reuseExistingServer: !process.env.CI,
+        timeout: 30_000,
+        stdout: 'ignore',
+      },
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

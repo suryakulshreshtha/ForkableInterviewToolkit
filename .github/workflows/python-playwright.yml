@@ -2,6 +2,7 @@ name: Python + Playwright
 
 on:
   push:
+    branches: [main]        # every branch ran the full matrix, twice
     paths:
       - 'projects/Python-Playwright-Automation/**'
       - '.github/workflows/python-playwright.yml'
@@ -11,6 +12,15 @@ on:
       - '.github/workflows/python-playwright.yml'
   workflow_dispatch:
 
+# Least privilege: without this the job inherits the repository default token.
+permissions:
+  contents: read
+
+# Three pushes in a minute should not run three browser matrices.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     working-directory: projects/Python-Playwright-Automation
@@ -19,18 +29,26 @@ jobs:
   test:
     name: pytest (${{ matrix.browser }})
     runs-on: ubuntu-latest
+    timeout-minutes: 25     # a hung browser otherwise burns the 360m default
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium]
 
     steps:
+      # NOTE: actions are pinned by tag, not by commit SHA. A tag can be
+      # repointed at any commit by whoever controls the action, which is how
+      # the tj-actions/changed-files compromise reached thousands of repos.
+      # Pin these properly with a tool that resolves real SHAs:
+      #     go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
+      #     pinact run
+      # Dependabot (see .github/dependabot.yml) then keeps the SHAs current.
       - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: projects/Python-Playwright-Automation/requirements.txt
 

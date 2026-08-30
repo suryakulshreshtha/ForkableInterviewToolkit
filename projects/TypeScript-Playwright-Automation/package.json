@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "test": "playwright test",
@@ -23,16 +23,23 @@
     "bdd:gen": "bddgen --config=playwright.bdd.config.ts",
     "test:bdd": "npm run bdd:gen && playwright test --config=playwright.bdd.config.ts",
     "load:target": "tsx examples/load-artillery/local-target-app.ts",
-    "load:test": "tsx scripts/run-load-test.ts"
+    "load:test": "tsx scripts/run-load-test.ts",
+    "lint": "eslint .",
+    "test:live": "BASE_URL=https://rahulshettyacademy.com/AutomationPractice/ playwright test"
   },
   "devDependencies": {
+    "@eslint/js": "^9.35.0",
     "@playwright/test": "^1.47.0",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.14.0",
+    "@types/node": "^22.18.0",
     "artillery": "^2.0.20",
+    "eslint": "^9.35.0",
+    "eslint-plugin-playwright": "^2.2.0",
     "express": "^4.19.2",
+    "globals": "^15.15.0",
     "playwright-bdd": "^9.2.0",
     "tsx": "^4.16.0",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.44.0"
   }
 }

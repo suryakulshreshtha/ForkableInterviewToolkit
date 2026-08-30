@@ -1,0 +1,65 @@
+name: Live site check
+
+# The framework suite runs against a local fixture so CI is deterministic. That
+# buys reliability at the cost of realism: if the real practice site changes,
+# the fixture is now wrong and nothing says so.
+#
+# This job closes that gap. It runs the identical specs against the live site on
+# a schedule, and it is deliberately non-blocking -- a third party's outage is
+# not a reason to fail your build, but it IS something you want to know about.
+on:
+  schedule:
+    - cron: "0 6 * * 1"        # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-site-check
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: projects/TypeScript-Playwright-Automation
+
+jobs:
+  live:
+    name: Same specs, real site (non-blocking)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+
+    steps:
+      # NOTE: actions are pinned by tag, not by commit SHA. A tag can be
+      # repointed at any commit by whoever controls the action, which is how
+      # the tj-actions/changed-files compromise reached thousands of repos.
+      # Pin these properly with a tool that resolves real SHAs:
+      #     go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
+      #     pinact run
+      # Dependabot (see .github/dependabot.yml) then keeps the SHAs current.
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: projects/TypeScript-Playwright-Automation/package-lock.json
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # One worker, one browser. Never load-test someone else's practice site:
+      # see the responsible-use policy in the repo README.
+      - name: Run against the live site
+        env:
+          BASE_URL: https://rahulshettyacademy.com/AutomationPractice/
+        run: npx playwright test --project=chromium --workers=1
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-site-report
+          path: projects/TypeScript-Playwright-Automation/playwright-report/
+          retention-days: 14

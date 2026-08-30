@@ -2,6 +2,7 @@ name: TypeScript + Playwright
 
 on:
   push:
+    branches: [main]        # every branch ran the full matrix, twice
     paths:
       - 'projects/TypeScript-Playwright-Automation/**'
       - '.github/workflows/typescript-playwright.yml'
@@ -11,6 +12,15 @@ on:
       - '.github/workflows/typescript-playwright.yml'
   workflow_dispatch:
 
+# Least privilege: without this the job inherits the repository default token.
+permissions:
+  contents: read
+
+# Three pushes in a minute should not run three browser matrices.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 defaults:
   run:
     working-directory: projects/TypeScript-Playwright-Automation
@@ -19,12 +29,20 @@ jobs:
   test:
     name: playwright test (${{ matrix.browser }})
     runs-on: ubuntu-latest
+    timeout-minutes: 25     # a hung browser otherwise burns the 360m default
     strategy:
       fail-fast: false
       matrix:
         browser: [chromium]
 
     steps:
+      # NOTE: actions are pinned by tag, not by commit SHA. A tag can be
+      # repointed at any commit by whoever controls the action, which is how
+      # the tj-actions/changed-files compromise reached thousands of repos.
+      # Pin these properly with a tool that resolves real SHAs:
+      #     go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
+      #     pinact run
+      # Dependabot (see .github/dependabot.yml) then keeps the SHAs current.
       - uses: actions/checkout@v4
 
       - name: Set up Node
@@ -39,6 +57,12 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      # The project had no linter at all: tsc --noEmit was the whole static
+      # analysis story. eslint-plugin-playwright catches test smells the
+      # compiler cannot see.
+      - name: Lint
+        run: npm run lint
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps ${{ matrix.browser }}
